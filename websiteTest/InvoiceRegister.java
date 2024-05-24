@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -76,18 +75,6 @@ public class InvoiceRegister {
       str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
     return str;
-  }
-
-  public static List<String> findCSVFiles(File folder) {
-    List<String> csvFiles = new ArrayList<>();
-    if (folder.isDirectory()) {
-      for (File file : folder.listFiles()) {
-        if (file.isFile() && file.getName().toLowerCase().endsWith(".csv")) {
-          csvFiles.add(file.getAbsolutePath());
-        }
-      }
-    }
-    return csvFiles;
   }
 
   public static String removeDotsReplaceComma(String valor) {
@@ -254,44 +241,7 @@ public class InvoiceRegister {
     }
   }
 
-  public void print() {
-    System.out.println(toString());
-  }
-
-  public String toString() {
-    String resp =
-      "[" +
-      dataString +
-      " ## " +
-      dataNum +
-      " ## " +
-      metodoPagamento +
-      " ## " +
-      historico +
-      " ## ";
-    resp += valor + "]";
-    return resp;
-  }
-
-  public static void main(String[] args) {
-    // String testFileDirectory = "";
-    // JFileChooser chooser = new JFileChooser();
-    // String userHome = System.getProperty("user.home");
-    // File downloadsFolder = new File(userHome, "Downloads");
-    // chooser.setCurrentDirectory(downloadsFolder);
-    // chooser.setDialogTitle("choosertitle");
-    // chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    // chooser.setAcceptAllFileFilterUsed(false);
-
-    // if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-    //   System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-    //   System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
-    //   testFileDirectory = chooser.getSelectedFile().toString();
-    //   testFileDirectory = testFileDirectory.replace("\\", "/");
-    //   System.out.println("testFileDirectory: " + testFileDirectory);
-    // } else {
-    //   System.out.println("No Selection ");
-    // }
+  public static void main(String[] args) {    
     String chosenFilePath = "";
     JFileChooser chooser = new JFileChooser(
       System.getProperty("user.home") + "/Downloads"
@@ -307,51 +257,18 @@ public class InvoiceRegister {
     }
     chosenFilePath = chosenFilePath.replace("\\", "/");
     try {
-      // String filePath = "";
       Scanner scanner = new Scanner(System.in);
       List<InvoiceRegister> allTransactions = new ArrayList<>();
-      // String folderPath = testFileDirectory;
-      // // "D:/gaming/site inovador/code/github/UNI/projects/extractDataFromCSV"
-      // File folder = new File(folderPath);
-      // List<String> csvFiles = findCSVFiles(folder);
-
-      // if (csvFiles.isEmpty()) {
-      //   System.out.println(
-      //     "Nenhum arquivo csv encontrado na pasta especificada. Pasta: " +
-      //     folderPath
-      //   );
-      // } else if (csvFiles.size() == 1) {
-      //   filePath = csvFiles.get(0);
-      //   System.out.println("Arquivo csv encontrado: " + filePath);
-      // } else {
-      //   System.out.println("Diversos arquivos CSV encontrados: ");
-      //   for (int i = 0; i < csvFiles.size(); i++) {
-      //     System.out.println((i + 1) + ". " + csvFiles.get(i));
-      //   }
-      //   System.out.print("Insira o número do arquivo CSV desejado: ");
-      //   int choice = scanner.nextInt();
-      //   if (choice >= 1 && choice <= csvFiles.size()) {
-      //     System.out.println(
-      //       "Você escolheu: \n" + csvFiles.get(choice - 1) + "\n"
-      //     );
-      //     filePath = csvFiles.get(choice - 1);
-      //   } else {
-      //     System.out.println("Escolha inválida.");
-      //   }
-      // }
-
       allTransactions = read(chosenFilePath);
 
       int countRegisters = 0;
 
       for (InvoiceRegister transaction : allTransactions) {
-        transaction.print();
         countRegisters++;
       }
 
       System.out.println("\nTotal de registros: " + countRegisters);
 
-      // output file must be in the same folder in which the source .csv file was found
       String outputPath = chosenFilePath.substring(
         0,
         chosenFilePath.lastIndexOf("/") + 1
