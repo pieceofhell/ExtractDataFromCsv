@@ -6,8 +6,31 @@
 #include <iomanip>
 #include <ctime>
 #include <algorithm>
+#include <windows.h>
+#include <commdlg.h>
+#include <conio.h>
 
 using namespace std;
+
+string openFileDialog()
+{
+    char filename[MAX_PATH] = {0};
+
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = nullptr;
+    ofn.lpstrFilter = "All Files\0*.*\0Text Files\0*.TXT\0";
+    ofn.lpstrFile = filename;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    if (GetOpenFileName(&ofn))
+    {
+        return filename;
+    }
+    return "";
+}
 
 // Function to trim spaces from a string
 string trim(const string &s)
@@ -130,17 +153,24 @@ void writeToCsv(const string &fileName, vector<Invoice> &transactions)
         else
         {
             file << transaction.id << ";" << transaction.dataString << ";" << ";" << ";" << ";" << transaction.historico << ";" << ";" << ";" << ";" << ";" << floatToString(transaction.valor * -1) << "\n";
-            
         }
     }
 }
 
 int main()
 {
-    string chosenFilePath = "D:/gaming/site inovador/code/github/ExtractDataFromCsv/mercantilcpp/1.txt";
-    // cout << "Enter the path to the CSV file: ";
+    // string chosenFilePath = "D:/gaming/site inovador/code/github/ExtractDataFromCsv/mercantilcpp/1.txt";
+    // g++ -o InvoiceRegister InvoiceRegister.cpp -lcomdlg32
 
-    // cin >> chosenFilePath;
+    string chosenFilePath = openFileDialog();
+    if (!chosenFilePath.empty())
+    {
+        cout << "Arquivo selecionado: " << chosenFilePath << endl;
+    }
+    else
+    {
+        cout << "Nenhum arquivo selecionado." << endl;
+    }
 
     try
     {
@@ -160,6 +190,9 @@ int main()
         outputPath += fileName;
 
         writeToCsv(outputPath, allTransactions);
+
+        cout << "Pressione qualquer tecla para fechar o programa...";
+        _getch(); // Wait for any key press
     }
     catch (const exception &e)
     {
