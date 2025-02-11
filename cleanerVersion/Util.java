@@ -19,6 +19,9 @@ public class Util {
     String lowerCaseHistorico = historico.toLowerCase();
     return (
       lowerCaseHistorico.contains("pizzaria") ||
+      lowerCaseHistorico.contains("bk") ||
+      lowerCaseHistorico.contains("supermercado") ||
+      lowerCaseHistorico.contains("padaria") ||
       lowerCaseHistorico.contains("trigopane") ||
       lowerCaseHistorico.contains("hamburguer") ||
       lowerCaseHistorico.contains("sorvete") ||
@@ -56,6 +59,7 @@ public class Util {
       str = str.substring(str.indexOf("*") + 1);
     }
     str = str.replace("Belo Horizont Bra", "");
+    str = str.replace("Operacao E Assessoria A Restaurantes Sa", "");
     if (Character.isLowerCase(str.charAt(0))) {
       str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }

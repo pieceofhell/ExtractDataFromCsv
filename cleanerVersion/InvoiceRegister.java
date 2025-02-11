@@ -147,6 +147,7 @@ public class InvoiceRegister {
             ";" +
             ";" +
             ";" +
+            ";" +
             negativeValue +
             ";" +
             positiveValue +
