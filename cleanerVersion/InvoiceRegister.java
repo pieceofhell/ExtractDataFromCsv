@@ -20,8 +20,9 @@ class Invoice {
   public String metodoPagamento;
   public String historico;
   public float valor;
+  public float saldo;
   public boolean isUber = false;
-  public boolean isComida = false;
+  public boolean isComida = false;  
 
   public void print() {
     System.out.println(toString());
@@ -55,7 +56,7 @@ public class InvoiceRegister {
 
     while ((line = buffer.readLine()) != null) {
       lineCount++;
-      if (lineCount <= 5) {
+      if (lineCount <= 6) {
         continue;
       }
 
@@ -89,71 +90,70 @@ public class InvoiceRegister {
     buffer.close();
     file.close();
     return allTransactions;
-  }
+    }
 
-  public static void writeToCsv(String filePath, List<Invoice> transactions) {
+    public static void writeToCsv(String filePath, List<Invoice> transactions) {
     try {
       FileWriter file = new FileWriter(filePath);
       BufferedWriter buffer = new BufferedWriter(file);
-      for (int i = transactions.size() - 1; i >= 0; i--) {
-        Invoice transaction = transactions.get(i);
-        String negativeValue = Util.removeNegative(transaction.valor) == 0
-          ? ""
-          : Util.replaceDotToComma(Util.removeNegative(transaction.valor));
-        String positiveValue = Util.removePositive(transaction.valor) == 0
-          ? ""
-          : Util.replaceDotToComma(
-            (Util.removePositive(transaction.valor) * -1)
-          );
+      for (Invoice transaction : transactions) {
+      String negativeValue = Util.removeNegative(transaction.valor) == 0
+        ? ""
+        : Util.replaceDotToComma(Util.removeNegative(transaction.valor));
+      String positiveValue = Util.removePositive(transaction.valor) == 0
+        ? ""
+        : Util.replaceDotToComma(
+        (Util.removePositive(transaction.valor) * -1)
+        );
 
-        if (transaction.isUber) {
-          buffer.write(
-            transaction.dataNum +
-            ";" +
-            ";" +
-            Util.removeGarbage(transaction.historico) +
-            ";" +
-            positiveValue +
-            ";" +
-            ";" +
-            ";" +
-            ";" +
-            ";" +
-            "\n"
-          );
-        } else if (transaction.isComida) {
-          buffer.write(
-            transaction.dataNum +
-            ";" +
-            ";" +
-            Util.removeGarbage(transaction.historico) +
-            ";" +
-            ";" +
-            ";" +
-            positiveValue +
-            ";" +
-            ";" +
-            ";" +
-            "\n"
-          );
-        } else {
-          buffer.write(
-            transaction.dataNum +
-            ";" +
-            ";" +
-            Util.removeGarbage(transaction.historico) +
-            ";" +
-            ";" +
-            ";" +
-            ";" +
-            ";" +
-            ";" +
-            negativeValue +
-            ";" +
-            positiveValue +
-            "\n"
-          );
-        }
+      if (transaction.isUber) {
+        buffer.write(
+        transaction.dataNum +
+        ";" +
+        ";" +
+        Util.removeGarbage(transaction.historico) +
+        ";" +
+        positiveValue +
+        ";" +
+        ";" +
+        ";" +
+        ";" +
+        ";" +
+        "\n"
+        );
+      } else if (transaction.isComida) {
+        buffer.write(
+        transaction.dataNum +
+        ";" +
+        ";" +
+        Util.removeGarbage(transaction.historico) +
+        ";" +
+        ";" +
+        ";" +
+        positiveValue +
+        ";" +
+        ";" +
+        ";" +
+        "\n"
+        );
+      } else {
+        buffer.write(
+        transaction.dataNum +
+        ";" +
+        ";" +
+        Util.removeGarbage(transaction.historico) +
+        ";" +
+        ";" +
+        ";" +
+        ";" +
+        ";" +
+        ";" +
+        negativeValue +
+        ";" +
+        positiveValue +
+        "\n"
+        );
+      }
       }
 
       buffer.close();
@@ -162,10 +162,9 @@ public class InvoiceRegister {
       System.out.println("ERRO NA ESCRITA DO ARQUIVO!");
       e.printStackTrace();
     }
-  }
+    }
 
-  public static void main(String[] args) {
-    
+    public static void main(String[] args) {
     // String testFileDirectory = "";
     // JFileChooser chooser = new JFileChooser();
     // String userHome = System.getProperty("user.home");
